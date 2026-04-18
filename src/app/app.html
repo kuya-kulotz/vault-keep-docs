@@ -1,0 +1,30 @@
+<header class="sticky-nav glass-card">
+  <div class="nav-logo" (click)="scrollTo('hero')">VaultKeep</div>
+  <nav class="nav-links">
+    <a (click)="scrollTo('problem')">Problem</a>
+    <a (click)="scrollTo('how-it-works')">Process</a>
+    <a (click)="scrollTo('features')">Features</a>
+    <a (click)="scrollTo('analytics')">Insights</a>
+    <a (click)="scrollTo('privacy')">Privacy</a>
+  </nav>
+  <div class="nav-cta">
+    <a href="#" class="btn-primary-sm">Download App</a>
+  </div>
+</header>
+
+<main class="smooth-content">
+  <app-hero id="hero"></app-hero>
+  <app-problem id="problem"></app-problem>
+  <app-how-it-works id="how-it-works"></app-how-it-works>
+  <app-features id="features"></app-features>
+  <app-analytics id="analytics"></app-analytics>
+  <app-privacy id="privacy"></app-privacy>
+</main>
+
+<app-footer (openLegal)="activeLegalModal = $event"></app-footer>
+
+<app-legal-modal
+  *ngIf="activeLegalModal"
+  [contentId]="activeLegalModal"
+  (close)="activeLegalModal = null">
+</app-legal-modal>

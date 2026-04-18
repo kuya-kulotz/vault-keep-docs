@@ -1,0 +1,69 @@
+.sticky-nav {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 40px);
+  max-width: 1200px;
+  z-index: 1000;
+  padding: 12px 24px;
+  border-radius: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .nav-logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--accent-green);
+    cursor: pointer;
+    font-family: var(--font-heading);
+    letter-spacing: 0.12rem;
+    text-transform: uppercase;
+    padding-left: 1rem;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 32px;
+
+    a {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: color 0.2s;
+
+      &:hover {
+        color: #fff;
+      }
+    }
+  }
+}
+
+.btn-primary-sm {
+  padding: 10px 20px;
+  border-radius: 20px;
+  background: var(--accent-green);
+  color: #000;
+  font-weight: 700;
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(0, 224, 102, 0.4);
+  }
+}
+
+.smooth-content {
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
+@media (max-width: 768px) {
+  .sticky-nav {
+    display: none;
+  }
+}
