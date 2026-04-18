@@ -156,36 +156,6 @@ export class Analytics implements AfterViewInit {
   @ViewChild('doughnutChart') doughnutChartRef!: ElementRef;
 
   ngAfterViewInit() {
-    this.initLineChart();
-    this.initDoughnutChart();
-  }
-
-  private initLineChart() {
-    new Chart(this.lineChartRef.nativeElement, {
-      type: 'line',
-      data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-        datasets: [{
-          label: 'Asset Value Trend',
-          data: [120000, 150000, 140000, 190000, 210000, 240000],
-          borderColor: '#00e066',
-          backgroundColor: 'rgba(0, 224, 102, 0.1)',
-          fill: true,
-          tension: 0.4,
-          pointRadius: 4,
-          pointBackgroundColor: '#00e066'
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { display: false } },
-        scales: {
-          y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: 'rgba(255,255,255,0.3)' } },
-          x: { grid: { display: false }, ticks: { color: 'rgba(255,255,255,0.3)' } }
-        }
-      }
-    });
   }
 
   private initDoughnutChart() {
