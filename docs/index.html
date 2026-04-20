@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/png" href="logo.png" />
     <title>VaultKeep | Funding</title>
     <style>
         /* CSS Variables mapped to VaultKeep Guidelines */
@@ -125,7 +124,6 @@
             gap: 16px;
         }
 
-        /* Make the 3rd item span full width if it's the last one in a 2-column grid */
         .qr-card:last-child:nth-child(odd) {
             grid-column: 1 / -1;
         }
@@ -201,14 +199,14 @@
 
         /* Modal Styles */
         .modal {
-            display: none; /* Hidden by default */
+            display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(15, 15, 15, 0.85); /* --bg with opacity */
-            backdrop-filter: blur(8px); /* Premium blur effect */
+            background-color: rgba(15, 15, 15, 0.85);
+            backdrop-filter: blur(8px);
             z-index: 1000;
             justify-content: center;
             align-items: center;
@@ -227,7 +225,7 @@
             max-width: 360px;
             background: var(--surface);
             border: 1px solid var(--primary-60);
-            box-shadow: 0 16px 48px rgba(0, 255, 127, 0.15); /* Primary glow */
+            box-shadow: 0 16px 48px rgba(0, 255, 127, 0.15);
             border-radius: 12px;
             padding: 24px;
             transform: scale(0.95);
@@ -271,6 +269,12 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            position: relative;
+        }
+
+        .modal-qr-wrapper:hover {
+            box-shadow: 0 0 0 2px var(--primary);
+            cursor: pointer;
         }
 
         .modal-qr-wrapper img {
@@ -279,6 +283,15 @@
             object-fit: contain;
             image-rendering: pixelated;
         }
+
+        .download-hint {
+            position: absolute;
+            bottom: -28px;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+        }
+
     </style>
 </head>
 <body>
@@ -305,7 +318,7 @@
                 <span class="text-sm font-mono text-primary-60">PAYPAL.ME</span>
             </div>
 
-            <a href="https://paypal.me/kuyakulotz" class="btn-primary">
+            <a href="https://paypal.me/YOUR_USERNAME" class="btn-primary">
                 <span class="text-base font-semibold">Initiate Transfer</span>
             </a>
         </div>
@@ -319,37 +332,37 @@
 
             <div class="qr-grid">
                 <!-- GCash -->
-                <div class="qr-card" onclick="openModal('gcash.png', 'GCASH')">
+                <div class="qr-card" onclick="openModal('gcash-qr.png', 'GCASH')">
                     <div style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
                         <span class="text-sm font-bold">GCash</span>
                         <span class="text-[10px] font-mono text-primary uppercase">Valid</span>
                     </div>
                     <div class="qr-wrapper">
-                        <img src="gcash.png" alt="GCash QR">
+                        <img src="gcash-qr.png" alt="GCash QR">
                     </div>
                     <span class="text-[10px] text-muted text-center uppercase font-mono">Tap to expand</span>
                 </div>
 
                 <!-- Maya -->
-                <div class="qr-card" onclick="openModal('paymaya.png', 'MAYA')">
+                <div class="qr-card" onclick="openModal('maya-qr.png', 'MAYA')">
                     <div style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
                         <span class="text-sm font-bold">Maya</span>
                         <span class="text-[10px] font-mono text-primary uppercase">Valid</span>
                     </div>
                     <div class="qr-wrapper">
-                        <img src="paymaya.png" alt="Maya QR">
+                        <img src="maya-qr.png" alt="Maya QR">
                     </div>
                     <span class="text-[10px] text-muted text-center uppercase font-mono">Tap to expand</span>
                 </div>
 
                 <!-- Vybe -->
-                <div class="qr-card" onclick="openModal('vybe.png', 'VYBE')">
+                <div class="qr-card" onclick="openModal('vybe-qr.png', 'VYBE')">
                     <div style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
                         <span class="text-sm font-bold">Vybe</span>
                         <span class="text-[10px] font-mono text-primary uppercase">Valid</span>
                     </div>
                     <div class="qr-wrapper">
-                        <img src="vybe.png" alt="Vybe QR">
+                        <img src="vybe-qr.png" alt="Vybe QR">
                     </div>
                     <span class="text-[10px] text-muted text-center uppercase font-mono">Tap to expand</span>
                 </div>
@@ -370,24 +383,38 @@
                 <span id="modalTitle" class="text-base font-bold font-mono">NODE</span>
                 <button class="close-btn font-mono" onclick="closeModal(event)">[CLOSE]</button>
             </div>
-            <div class="modal-qr-wrapper">
-                <img id="modalImg" src="" alt="Enlarged QR">
+
+            <!-- Wrapping the image inside an anchor tag for downloading -->
+            <div style="margin-bottom: 28px;">
+                <a id="modalDownloadLink" href="" download="" style="text-decoration: none; display: block;">
+                    <div class="modal-qr-wrapper" title="Click to download">
+                        <img id="modalImg" src="" alt="Enlarged QR">
+                        <div class="download-hint text-[10px] font-mono text-primary uppercase">[ CLICK TO DOWNLOAD ]</div>
+                    </div>
+                </a>
             </div>
+
             <p class="text-xs text-muted text-center" style="margin-top: 20px;">
-                Long-press or save this image to your local device, then upload it into the respective application.
+                Download or long-press this image to save it locally, then import it into your application node.
             </p>
         </div>
     </div>
 
-    <!-- JavaScript for Modal Interactivity -->
+    <!-- JavaScript for Modal Interactivity & Download -->
     <script>
         function openModal(imgSrc, title) {
+            // Set image source and title
             document.getElementById('modalImg').src = imgSrc;
             document.getElementById('modalTitle').innerText = title + " NODE";
 
+            // Set up the download attributes dynamically
+            const downloadLink = document.getElementById('modalDownloadLink');
+            downloadLink.href = imgSrc;
+            // Name the downloaded file dynamically (e.g., VaultKeep-GCASH-QR.png)
+            downloadLink.download = 'VaultKeep-' + title + '-QR.png';
+
             const modal = document.getElementById('qrModal');
             modal.style.display = 'flex';
-            // Slight delay to allow CSS transition to trigger
             setTimeout(() => {
                 modal.classList.add('active');
             }, 10);
@@ -396,7 +423,6 @@
         function closeModal(event) {
             const modal = document.getElementById('qrModal');
             modal.classList.remove('active');
-            // Wait for transition to finish before hiding completely
             setTimeout(() => {
                 modal.style.display = 'none';
             }, 300);
