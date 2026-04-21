@@ -23,8 +23,9 @@
 
 <app-footer (openLegal)="activeLegalModal = $event"></app-footer>
 
-<app-legal-modal
-  *ngIf="activeLegalModal"
-  [contentId]="activeLegalModal"
-  (close)="activeLegalModal = null">
-</app-legal-modal>
+@if(activeLegalModal){
+  <app-legal-modal
+    [contentId]="activeLegalModal"
+    (close)="activeLegalModal = null">
+  </app-legal-modal>
+}
