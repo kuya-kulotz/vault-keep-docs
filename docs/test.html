@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VaultKeep | Closed Testing Program</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        background: '#0F0F0F',
+                        surface: '#1A1A1A',
+                        primary: '#00FF7F',
+                        accent: '#FFD700',
+                        danger: '#FF4500',
+                        muted: '#A0A0A0',
+                    },
+                    fontFamily: {
+                        /* System fonts per strategy */
+                        sans: ['system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'sans-serif'],
+                        /* Monospace for data/labels */
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0F0F0F;
+            color: #FFFFFF;
+        }
+
+        /* Tactile button interactions */
+        .btn-primary {
+            background-color: #00FF7F;
+            color: #0F0F0F;
+            transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 255, 127, 0.2);
+        }
+        .btn-primary:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 255, 127, 0.1);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid rgba(160, 160, 160, 0.2);
+            color: #FFFFFF;
+            transition: all 0.1s ease-in-out;
+        }
+        .btn-secondary:hover {
+            border-color: #00FF7F;
+            color: #00FF7F;
+            background-color: rgba(0, 255, 127, 0.05);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 selection:bg-primary/20 selection:text-primary">
+
+    <main class="w-full max-w-md">
+
+        <header class="text-center mb-8">
+            <h1 class="text-3xl font-bold tracking-tight mb-2">VaultKeep</h1>
+            <p class="text-base text-muted px-4">Offline-first, privacy-respecting asset and warranty management.</p>
+
+            <div class="inline-block mt-4 px-2 py-1 bg-primary/10 border border-primary/20 rounded text-[10px] text-primary font-mono uppercase tracking-widest">
+                Closed Testing Program
+            </div>
+        </header>
+
+        <div class="bg-surface rounded-xl p-6 sm:p-8 shadow-2xl border border-muted/10">
+
+            <p class="text-sm text-gray-300 mb-8 leading-relaxed">
+                Welcome. To participate in the testing phase and access the application, please complete the following steps in order.
+            </p>
+
+            <div class="relative">
+
+                <div class="absolute left-4 top-4 bottom-12 w-px bg-muted/10 z-0"></div>
+
+                <div class="relative z-10 mb-8">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 w-8 h-8 bg-background border border-primary/40 rounded-full flex items-center justify-center font-mono text-primary text-sm shadow-[0_0_8px_rgba(0,255,127,0.2)] mt-0.5">
+                            1
+                        </div>
+                        <div class="ml-4 w-full">
+                            <h2 class="text-lg font-semibold mb-1">Join Tester Group</h2>
+                            <p class="text-sm text-muted mb-4">Click below and select <span class="font-semibold text-gray-200">"Ask to join group"</span>. Wait for approval before proceeding.</p>
+
+                            <a href="https://groups.google.com/g/vaultkeeptesters" target="_blank" rel="noopener noreferrer"
+                               class="btn-primary block w-full text-center py-3.5 rounded-lg font-semibold text-sm uppercase tracking-wide">
+                                Join Google Group
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative z-10">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 w-8 h-8 bg-surface border border-muted/30 rounded-full flex items-center justify-center font-mono text-muted text-sm mt-0.5">
+                            2
+                        </div>
+                        <div class="ml-4 w-full">
+                            <h2 class="text-lg font-semibold mb-1">Download VaultKeep</h2>
+                            <p class="text-sm text-muted mb-4">Once approved, click below to opt-in on the Play Store and install the application.</p>
+
+                            <a href="https://play.google.com/apps/testing/com.kuyakulotz.vaultkeep" target="_blank" rel="noopener noreferrer"
+                               class="btn-secondary block w-full text-center py-3.5 rounded-lg font-semibold text-sm uppercase tracking-wide">
+                                Get App on Play Store
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <footer class="mt-8 text-center">
+            <p class="text-[10px] text-muted/60 font-mono uppercase tracking-widest">
+                Local Inference • Zero Cloud Dependencies
+            </p>
+        </footer>
+
+    </main>
+
+</body>
+</html>
