@@ -1,433 +1,1056 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="logo.png" />
-    <title>VaultKeep | Funding</title>
-    <style>
-        /* CSS Variables mapped to VaultKeep Guidelines */
-        :root {
-            --bg: #0F0F0F;
-            --surface: #1A1A1A;
-            --primary: #00FF7F;
-            --primary-10: rgba(0, 255, 127, 0.1);
-            --primary-20: rgba(0, 255, 127, 0.2);
-            --primary-60: rgba(0, 255, 127, 0.6);
-            --accent: #FFD700;
-            --danger: #FF4500;
-            --muted: #A0A0A0;
-            --muted-10: rgba(160, 160, 160, 0.1);
-            --white: #FFFFFF;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VaultKeep - Offline Asset & Warranty Manager</title>
+  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    :root {
+      --bg: #0F0F0F;
+      --surface: #1A1A1A;
+      --primary: #00FF7F;
+      --accent: #FFD700;
+      --danger: #FF4500;
+      --muted: #A0A0A0;
+    }
 
-        /* Base Setup */
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro", "Roboto", sans-serif;
-            background-color: var(--bg);
-            color: var(--white);
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 24px;
-            -webkit-font-smoothing: antialiased;
-            box-sizing: border-box;
-        }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        * { box-sizing: border-box; }
+    html {
+      scroll-behavior: smooth;
+    }
 
-        /* Typography Tokens */
-        .text-3xl { font-size: 30px; line-height: 1.2; }
-        .text-2xl { font-size: 24px; line-height: 1.3; }
-        .text-xl { font-size: 20px; line-height: 1.4; }
-        .text-lg { font-size: 18px; line-height: 1.4; }
-        .text-base { font-size: 16px; line-height: 1.5; }
-        .text-sm { font-size: 14px; line-height: 1.5; }
-        .text-xs { font-size: 12px; line-height: 1.5; }
-        .text-\[10px\] { font-size: 10px; line-height: 1.5; }
-        .text-\[8px\] { font-size: 8px; line-height: 1.5; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: #fff;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
 
-        .font-bold { font-weight: 700; }
-        .font-semibold { font-weight: 600; }
-        .font-mono { font-family: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, monospace; }
-        .uppercase { text-transform: uppercase; letter-spacing: 0.05em; }
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
 
-        /* Utility Colors */
-        .text-primary { color: var(--primary); }
-        .text-primary-60 { color: var(--primary-60); }
-        .text-muted { color: var(--muted); }
-        .text-accent { color: var(--accent); }
-        .text-danger { color: var(--danger); }
+    /* Animations */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-        /* Layout & Components */
-        .container {
-            width: 100%;
-            max-width: 440px;
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-        }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
 
-        .header { margin-bottom: 8px; }
+    @keyframes glowPulse {
+      0%, 100% { box-shadow: 0 0 20px rgba(0, 255, 127, 0.2); }
+      50% { box-shadow: 0 0 40px rgba(0, 255, 127, 0.4); }
+    }
 
-        .card {
-            background-color: var(--surface);
-            border: 1px solid var(--muted-10);
-            border-radius: 12px;
-            padding: 24px;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
 
-        .card:hover {
-            border-color: var(--primary-20);
-            box-shadow: 0 8px 32px var(--primary-10);
-        }
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s ease-out;
+    }
 
-        .section-label {
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
 
-        .line {
-            flex-grow: 1;
-            height: 1px;
-            background-color: var(--muted-10);
-        }
+    /* Geometric Background */
+    .geo-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
 
-        .btn-primary {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            background-color: var(--primary-10);
-            color: var(--primary);
-            border: 1px solid var(--primary-20);
-            padding: 16px;
-            border-radius: 8px;
-            text-decoration: none;
-            transition: all 0.2s ease;
-            cursor: pointer;
-        }
+    .geo-shape {
+      position: absolute;
+      border: 1px solid rgba(0, 255, 127, 0.08);
+      border-radius: 0;
+      animation: fadeInUp 1s ease-out forwards;
+    }
 
-        .btn-primary:hover {
-            background-color: var(--primary-20);
-            border-color: var(--primary);
-            box-shadow: 0 0 16px var(--primary-10);
-        }
+    .geo-1 { width: 600px; height: 600px; top: -200px; right: -100px; transform: rotate(45deg); }
+    .geo-2 { width: 400px; height: 400px; bottom: 20%; left: -150px; transform: rotate(30deg); }
+    .geo-3 { width: 300px; height: 300px; top: 50%; right: -100px; transform: rotate(15deg); }
 
-        .qr-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-        }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
 
-        .qr-card:last-child:nth-child(odd) {
-            grid-column: 1 / -1;
-        }
+    /* Header */
+    header {
+      padding: 24px 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(15, 15, 15, 0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(160, 160, 160, 0.1);
+    }
 
-        .qr-card {
-            background-color: var(--bg);
-            border: 1px solid var(--muted-10);
-            border-radius: 8px;
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-        .qr-card:hover {
-            border-color: var(--primary-60);
-            box-shadow: 0 0 16px var(--primary-10);
-            transform: translateY(-2px);
-        }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--primary);
+    }
 
-        .qr-wrapper {
-            width: 100%;
-            aspect-ratio: 1/1;
-            background-color: var(--white);
-            border-radius: 4px;
-            padding: 8px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--primary), #00cc66);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
 
-        .qr-wrapper img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            image-rendering: pixelated;
-        }
+    nav {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+    }
 
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            background-color: var(--primary-10);
-            border: 1px solid var(--primary-20);
-            padding: 4px 8px;
-            border-radius: 100px;
-            color: var(--primary);
-        }
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
 
-        .status-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background-color: var(--primary);
-            box-shadow: 0 0 8px var(--primary);
-        }
+    nav a:hover {
+      color: #fff;
+    }
 
-        .data-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid var(--muted-10);
-        }
+    .cta-btn {
+      background: var(--primary);
+      color: var(--bg);
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: none;
+      cursor: pointer;
+    }
 
-        .data-row:last-child {
-            border-bottom: none;
-            padding-bottom: 0;
-        }
+    .cta-btn:hover {
+      background: #00e672;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 20px rgba(0, 255, 127, 0.3);
+    }
 
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(15, 15, 15, 0.85);
-            backdrop-filter: blur(8px);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            padding: 24px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
+    /* Hero */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 120px 0 80px;
+    }
 
-        .modal.active {
-            display: flex;
-            opacity: 1;
-        }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
 
-        .modal-content {
-            width: 100%;
-            max-width: 360px;
-            background: var(--surface);
-            border: 1px solid var(--primary-60);
-            box-shadow: 0 16px 48px rgba(0, 255, 127, 0.15);
-            border-radius: 12px;
-            padding: 24px;
-            transform: scale(0.95);
-            transition: transform 0.3s ease;
-        }
+    .hero-content h1 {
+      font-size: 56px;
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 24px;
+    }
 
-        .modal.active .modal-content {
-            transform: scale(1);
-        }
+    .hero-content h1 span {
+      color: var(--primary);
+    }
 
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            border-bottom: 1px solid var(--muted-10);
-            padding-bottom: 12px;
-        }
+    .hero-content p {
+      font-size: 18px;
+      color: var(--muted);
+      margin-bottom: 40px;
+      max-width: 480px;
+    }
 
-        .close-btn {
-            background: none;
-            border: none;
-            color: var(--muted);
-            font-family: inherit;
-            font-size: 14px;
-            cursor: pointer;
-            padding: 4px;
-            transition: color 0.2s ease;
-        }
+    .hero-tags {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
 
-        .close-btn:hover {
-            color: var(--danger);
-        }
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: rgba(0, 255, 127, 0.1);
+      border: 1px solid rgba(0, 255, 127, 0.2);
+      border-radius: 100px;
+      font-size: 13px;
+      color: var(--primary);
+    }
 
-        .modal-qr-wrapper {
-            width: 100%;
-            aspect-ratio: 1/1;
-            background: var(--white);
-            border-radius: 8px;
-            padding: 16px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-        }
+    .tag svg {
+      stroke: currentColor;
+      stroke-width: 1.5;
+      fill: none;
+    }
 
-        .modal-qr-wrapper:hover {
-            box-shadow: 0 0 0 2px var(--primary);
-            cursor: pointer;
-        }
+    .tag.accent {
+      background: rgba(255, 215, 0, 0.1);
+      border-color: rgba(255, 215, 0, 0.2);
+      color: var(--accent);
+    }
 
-        .modal-qr-wrapper img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            image-rendering: pixelated;
-        }
+    .tag.danger {
+      background: rgba(255, 69, 0, 0.1);
+      border-color: rgba(255, 69, 0, 0.2);
+      color: var(--danger);
+    }
 
-        .download-hint {
-            position: absolute;
-            bottom: -28px;
-            left: 50%;
-            transform: translateX(-50%);
-            white-space: nowrap;
-        }
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+    }
 
-    </style>
+    .btn {
+      padding: 16px 32px;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: var(--bg);
+    }
+
+    .btn-primary:hover {
+      background: #00e672;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0, 255, 127, 0.4);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: #fff;
+      border: 1px solid rgba(160, 160, 160, 0.3);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    /* Phone Mockup */
+    .hero-visual {
+      position: relative;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .phone-frame {
+      width: 280px;
+      height: 560px;
+      background: var(--surface);
+      border-radius: 40px;
+      padding: 6px;
+      margin: 0 auto;
+      border: 2px solid rgba(160, 160, 160, 0.2);
+      box-shadow: 0 50px 100px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);
+      position: relative;
+    }
+
+    .phone-screen {
+      background: var(--bg);
+      border-radius: 30px;
+      height: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .phone-notch {
+      position: absolute;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 28px;
+      background: var(--surface);
+      border-radius: 20px;
+      z-index: 10;
+    }
+
+    .screen-content {
+      padding: 80px 20px 20px;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .app-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .app-title {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .app-balance {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 28px;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .asset-card {
+      background: var(--surface);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+
+    .asset-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .asset-name {
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    .asset-brand {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .warranty-badge {
+      font-size: 10px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .badge-active {
+      background: rgba(0, 255, 127, 0.15);
+      color: var(--primary);
+    }
+
+    .badge-expiring {
+      background: rgba(255, 215, 0, 0.15);
+      color: var(--accent);
+    }
+
+    .asset-footer {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .asset-price {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .nav-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--surface);
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-around;
+      border-top: 1px solid rgba(160, 160, 160, 0.1);
+    }
+
+    .nav-item {
+      width: 24px;
+      height: 24px;
+      opacity: 0.5;
+    }
+
+    .nav-item.active {
+      opacity: 1;
+      color: var(--primary);
+    }
+
+    /* Features */
+    .features {
+      padding: 120px 0;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 80px;
+    }
+
+    .section-header h2 {
+      font-size: 40px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .section-header h2 span {
+      color: var(--primary);
+    }
+
+    .section-header p {
+      font-size: 18px;
+      color: var(--muted);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid rgba(160, 160, 160, 0.1);
+      border-radius: 20px;
+      padding: 32px;
+      transition: all 0.3s;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .feature-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .feature-card:hover {
+      border-color: rgba(0, 255, 127, 0.3);
+      transform: translateY(-4px);
+    }
+
+    .feature-icon {
+      width: 56px;
+      height: 56px;
+      background: rgba(0, 255, 127, 0.1);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      color: var(--primary);
+      box-shadow: 0 0 20px rgba(0, 255, 127, 0.2);
+      animation: glowPulse 3s ease-in-out infinite;
+    }
+
+    .feature-icon svg {
+      width: 28px;
+      height: 28px;
+      stroke: currentColor;
+      stroke-width: 1.5;
+      fill: none;
+    }
+
+    .feature-card h3 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .feature-card p {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* AI Section */
+    .ai-section {
+      padding: 120px 0;
+      background: linear-gradient(180deg, transparent, rgba(0, 255, 127, 0.02));
+    }
+
+    .ai-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .ai-content h2 {
+      font-size: 40px;
+      font-weight: 700;
+      margin-bottom: 24px;
+    }
+
+    .ai-content h2 span {
+      color: var(--primary);
+    }
+
+    .ai-content > p {
+      color: var(--muted);
+      font-size: 16px;
+      margin-bottom: 32px;
+      line-height: 1.8;
+    }
+
+    .ai-features {
+      display: grid;
+      gap: 20px;
+    }
+
+    .ai-feature {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .ai-feature-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--surface);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--primary);
+      font-size: 18px;
+      box-shadow: 0 0 15px rgba(0, 255, 127, 0.2);
+    }
+
+    .ai-feature-icon svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      stroke-width: 1.5;
+      fill: none;
+    }
+
+    .ai-feature h4 {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .ai-feature p {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .ai-visual {
+      background: var(--surface);
+      border-radius: 24px;
+      padding: 40px;
+      border: 1px solid rgba(160, 160, 160, 0.1);
+    }
+
+    .code-block {
+      background: var(--bg);
+      border-radius: 12px;
+      padding: 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      overflow-x: auto;
+    }
+
+    .code-keyword { color: #c792ea; }
+    .code-string { color: var(--primary); }
+    .code-function { color: #82aaff; }
+    .code-comment { color: var(--muted); }
+    .code-property { color: var(--accent); }
+
+    /* Stats */
+    .stats {
+      padding: 80px 0;
+      border-top: 1px solid rgba(160, 160, 160, 0.1);
+      border-bottom: 1px solid rgba(160, 160, 160, 0.1);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 40px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 48px;
+      font-weight: 700;
+      color: var(--primary);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+
+    /* Privacy Banner */
+    .privacy-banner {
+      padding: 120px 0;
+      text-align: center;
+    }
+
+    .privacy-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 32px;
+      background: rgba(0, 255, 127, 0.08);
+      border: 1px solid rgba(0, 255, 127, 0.2);
+      border-radius: 100px;
+      margin-bottom: 32px;
+    }
+
+    .privacy-badge svg {
+      width: 24px;
+      height: 24px;
+      color: var(--primary);
+    }
+
+    .privacy-badge span {
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .privacy-banner h2 {
+      font-size: 48px;
+      font-weight: 700;
+      max-width: 700px;
+      margin: 0 auto 24px;
+      line-height: 1.2;
+    }
+
+    .privacy-banner h2 span {
+      color: var(--primary);
+    }
+
+    .privacy-banner p {
+      font-size: 18px;
+      color: var(--muted);
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    /* CTA */
+    .cta-section {
+      padding: 120px 0;
+      text-align: center;
+    }
+
+    .cta-section h2 {
+      font-size: 40px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .cta-section p {
+      color: var(--muted);
+      font-size: 18px;
+      margin-bottom: 40px;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+    }
+
+    /* Footer */
+    footer {
+      padding: 40px 0;
+      border-top: 1px solid rgba(160, 160, 160, 0.1);
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .footer-copy {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-links a {
+      font-size: 14px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: #fff;
+    }
+
+    /* Donation Section */
+    .donation-section {
+      padding: 80px 0;
+      background: linear-gradient(180deg, transparent, rgba(0, 255, 127, 0.02));
+    }
+
+    .donation-card {
+      max-width: 500px;
+      margin: 0 auto;
+      text-align: center;
+      background: var(--surface);
+      border: 1px solid rgba(160, 160, 160, 0.1);
+      border-radius: 24px;
+      padding: 48px;
+    }
+
+    .donation-icon {
+      width: 72px;
+      height: 72px;
+      background: rgba(255, 69, 0, 0.1);
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      color: var(--danger);
+      animation: glowPulse 3s ease-in-out infinite;
+      box-shadow: 0 0 20px rgba(255, 69, 0, 0.2);
+    }
+
+    .donation-icon svg {
+      width: 32px;
+      height: 32px;
+      stroke: currentColor;
+      stroke-width: 1.5;
+      fill: none;
+    }
+
+    .donation-card h2 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .donation-card p {
+      color: var(--muted);
+      font-size: 15px;
+      margin-bottom: 32px;
+      line-height: 1.7;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .hero-grid,
+      .ai-grid {
+        grid-template-columns: 1fr;
+        gap: 60px;
+      }
+
+      .hero-content h1 {
+        font-size: 40px;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      nav {
+        display: none;
+      }
+
+      .phone-frame {
+        width: 240px;
+        height: 480px;
+      }
+    }
+  </style>
 </head>
 <body>
+  <!-- Geometric Background -->
+  <div class="geo-bg">
+    <div class="geo-shape geo-1"></div>
+    <div class="geo-shape geo-2"></div>
+    <div class="geo-shape geo-3"></div>
+  </div>
 
+  <!-- Header -->
+  <header>
+    <div class="container header-inner">
+      <div class="logo">
+        <img src="logo.png" alt="VaultKeep" style="height: 36px; width: auto;">
+        <span style="font-size: 20px; font-weight: 700; color: #fff; letter-spacing: -0.5px;">vault<span style="color: var(--primary);">Keep</span></span>
+      </div>
+      <nav>
+        <a href="#features">Features</a>
+        <a href="#ai">AI Engine</a>
+        <a href="#privacy">Privacy</a>
+        <a href="https://kuya-kulotz.github.io/vault-keep-docs/test.html" class="cta-btn">Join Closed Testing</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
     <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <h1 class="text-3xl font-bold">Funding Node</h1>
-            <p class="text-sm text-muted" style="margin-top: 8px;">Secure transfer portal for VaultKeep operations. All localized instances are active.</p>
+      <div class="hero-grid">
+        <div class="hero-content">
+          <h1 style="animation: fadeInUp 0.8s ease-out forwards;">Your Assets.<br><span>Your Data.</span><br>Your Device.</h1>
+          <p style="animation: fadeInUp 0.8s ease-out 0.2s forwards; opacity: 0;">100% offline, privacy-first asset and warranty management. AI-powered receipt scanning with zero cloud dependencies.</p>
+          <div class="hero-tags" style="animation: fadeInUp 0.8s ease-out 0.4s forwards; opacity: 0;">
+            <span class="tag"><i data-lucide="lock" style="width: 14px; height: 14px; stroke: currentColor; stroke-width: 1.5; fill: none;"></i> 100% Offline</span>
+            <span class="tag accent"><i data-lucide="cpu" style="width: 14px; height: 14px; stroke: currentColor; stroke-width: 1.5; fill: none;"></i> Local AI</span>
+            <span class="tag danger"><i data-lucide="cloud-off" style="width: 14px; height: 14px; stroke: currentColor; stroke-width: 1.5; fill: none;"></i> No Cloud</span>
+          </div>
+          <div class="hero-actions" style="animation: fadeInUp 0.8s ease-out 0.6s forwards; opacity: 0;">
+            <a href="https://kuya-kulotz.github.io/vault-keep-docs/test.html" class="btn btn-primary"><i data-lucide="download" style="width: 18px; height: 18px; stroke: currentColor; stroke-width: 1.5; fill: none;"></i> Get on Android</a>
+            <a href="#features" class="btn btn-secondary">Learn More</a>
+          </div>
         </div>
-
-        <!-- International Support (PayPal) -->
-        <div class="card">
-            <div class="section-label">
-                <span class="text-xs font-semibold uppercase text-muted">Network: International</span>
-                <div class="line"></div>
-                <div class="status-badge text-[8px] font-bold uppercase font-mono">
-                    <div class="status-dot"></div> ACTIVE
-                </div>
+        <div class="hero-visual">
+          <div class="phone-frame">
+            <div class="phone-screen">
+              <img src="vaultkeep_1.jpg" alt="VaultKeep App" style="width: 100%; height: 100%; object-fit: cover;">
             </div>
-
-            <div class="data-row" style="margin-bottom: 16px;">
-                <span class="text-sm text-muted">Protocol</span>
-                <span class="text-sm font-mono text-primary-60">PAYPAL.ME</span>
-            </div>
-
-            <a href="https://paypal.me/kuyakulotz" class="btn-primary">
-                <span class="text-base font-semibold">Initiate Transfer</span>
-            </a>
+          </div>
         </div>
-
-        <!-- Local Nodes (QR) -->
-        <div class="card">
-            <div class="section-label" style="margin-bottom: 20px;">
-                <span class="text-xs font-semibold uppercase text-muted">Network: PH Local</span>
-                <div class="line"></div>
-            </div>
-
-            <div class="qr-grid">
-                <!-- GCash -->
-                <div class="qr-card" onclick="openModal('gcash-qr.png', 'GCASH')">
-                    <div style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
-                        <span class="text-sm font-bold">GCash</span>
-                        <span class="text-[10px] font-mono text-primary uppercase">Valid</span>
-                    </div>
-                    <div class="qr-wrapper">
-                        <img src="gcash-qr.png" alt="GCash QR">
-                    </div>
-                    <span class="text-[10px] text-muted text-center uppercase font-mono">Tap to expand</span>
-                </div>
-
-                <!-- Maya -->
-                <div class="qr-card" onclick="openModal('maya-qr.png', 'MAYA')">
-                    <div style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
-                        <span class="text-sm font-bold">Maya</span>
-                        <span class="text-[10px] font-mono text-primary uppercase">Valid</span>
-                    </div>
-                    <div class="qr-wrapper">
-                        <img src="maya-qr.png" alt="Maya QR">
-                    </div>
-                    <span class="text-[10px] text-muted text-center uppercase font-mono">Tap to expand</span>
-                </div>
-
-                <!-- Vybe -->
-                <div class="qr-card" onclick="openModal('vybe-qr.png', 'VYBE')">
-                    <div style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
-                        <span class="text-sm font-bold">Vybe</span>
-                        <span class="text-[10px] font-mono text-primary uppercase">Valid</span>
-                    </div>
-                    <div class="qr-wrapper">
-                        <img src="vybe-qr.png" alt="Vybe QR">
-                    </div>
-                    <span class="text-[10px] text-muted text-center uppercase font-mono">Tap to expand</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Footer System Info -->
-        <div style="text-align: center; margin-top: 8px;">
-            <p class="text-[10px] font-mono text-muted">SYS.STATUS: <span class="text-primary">ONLINE</span> | ENV: <span class="text-accent">PRODUCTION</span></p>
-        </div>
+      </div>
     </div>
+  </section>
 
-    <!-- The Modal -->
-    <div id="qrModal" class="modal" onclick="closeModal(event)">
-        <!-- Stop propagation so clicking inside the modal doesn't close it -->
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <div class="modal-header">
-                <span id="modalTitle" class="text-base font-bold font-mono">NODE</span>
-                <button class="close-btn font-mono" onclick="closeModal(event)">[CLOSE]</button>
-            </div>
-
-            <!-- Wrapping the image inside an anchor tag for downloading -->
-            <div style="margin-bottom: 28px;">
-                <a id="modalDownloadLink" href="" download="" style="text-decoration: none; display: block;">
-                    <div class="modal-qr-wrapper" title="Click to download">
-                        <img id="modalImg" src="" alt="Enlarged QR">
-                        <div class="download-hint text-[10px] font-mono text-primary uppercase">[ CLICK TO DOWNLOAD ]</div>
-                    </div>
-                </a>
-            </div>
-
-            <p class="text-xs text-muted text-center" style="margin-top: 20px;">
-                Download or long-press this image to save it locally, then import it into your application node.
-            </p>
+  <!-- Stats -->
+  <section class="stats">
+    <div class="container">
+      <div class="stats-grid">
+        <div>
+          <div class="stat-value">100%</div>
+          <div class="stat-label">Offline Operation</div>
         </div>
+        <div>
+          <div class="stat-value">0</div>
+          <div class="stat-label">Cloud Dependencies</div>
+        </div>
+        <div>
+          <div class="stat-value">5</div>
+          <div class="stat-label">OCR Algorithms</div>
+        </div>
+        <div>
+          <div class="stat-value">0ms</div>
+          <div class="stat-label">Latency to AI</div>
+        </div>
+      </div>
     </div>
+  </section>
 
-    <!-- JavaScript for Modal Interactivity & Download -->
-    <script>
-        function openModal(imgSrc, title) {
-            // Set image source and title
-            document.getElementById('modalImg').src = imgSrc;
-            document.getElementById('modalTitle').innerText = title + " NODE";
+  <!-- Features -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="section-header">
+        <h2>Built for <span>Asset Protection</span></h2>
+        <p>Powerful features designed to keep your warranties organized and your data private.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon"><i data-lucide="scan"></i></div>
+          <h3>Smart Receipt Scanning</h3>
+          <p>AI-powered OCR that automatically extracts merchant, items, and totals. Supports multiple parsing algorithms for different receipt formats.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><i data-lucide="shield-check"></i></div>
+          <h3>Warranty Tracking</h3>
+          <p>Track expiring warranties with smart notifications. Grouped alerts at 30d, 7d, 1d intervals with deep linking to filtered views.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><i data-lucide="bar-chart-3"></i></div>
+          <h3>Visual Analytics</h3>
+          <p>Dashboard with portfolio overview, spending charts, category breakdowns, and warranty timeline visualization.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><i data-lucide="coins"></i></div>
+          <h3>Multi-Currency</h3>
+          <p>Built-in currency conversion to track asset values accurately across different markets with live offline rates.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><i data-lucide="archive"></i></div>
+          <h3>Backup & Restore</h3>
+          <p>Export all data to shareable ZIP files. Restore on any device with full data integrity. Selective clear options available.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><i data-lucide="layout-grid"></i></div>
+          <h3>Home Widget</h3>
+          <p>Quick-access scan button widget for instant receipt capture directly from your Android home screen.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-            // Set up the download attributes dynamically
-            const downloadLink = document.getElementById('modalDownloadLink');
-            downloadLink.href = imgSrc;
-            // Name the downloaded file dynamically (e.g., VaultKeep-GCASH-QR.png)
-            downloadLink.download = 'VaultKeep-' + title + '-QR.png';
+  <!-- AI Engine -->
+  <section class="ai-section" id="ai">
+    <div class="container">
+      <div class="ai-grid">
+        <div class="ai-content">
+          <h2>Dual-Mode <span>Hybrid Intelligence</span></h2>
+          <p>VaultKeep combines deterministic parsing with neural auditing for bulletproof receipt digitization without the cloud.</p>
+          <div class="ai-features">
+            <div class="ai-feature">
+              <div class="ai-feature-icon"><i data-lucide="columns"></i></div>
+              <div>
+                <h4>Deterministic Parser</h4>
+                <p>Code-based vision engine that physically slices receipts by columnar layout or intelligently walks text patterns. Guarantees 100% duplicate-free extraction.</p>
+              </div>
+            </div>
+            <div class="ai-feature">
+              <div class="ai-feature-icon"><i data-lucide="brain"></i></div>
+              <div>
+                <h4>Neural Auditor</h4>
+                <p>Local AI prompt for semantic understanding. Extracts high-level metadata (merchant, category, date, total) without hallucinating items.</p>
+              </div>
+            </div>
+            <div class="ai-feature">
+              <div class="ai-feature-icon"><i data-lucide="toggle-right"></i></div>
+              <div>
+                <h4>OCR-Only Mode</h4>
+                <p>Toggle Smart Processing on/off in settings for faster scanning without AI enhancement when you need speed.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ai-visual">
+          <div class="code-block">
+            <div><span class="code-comment">// Hybrid Intelligence Engine</span></div>
+            <div><span class="code-keyword">const</span> <span class="code-property">receipt</span> = <span class="code-keyword">await</span> <span class="code-function">scanReceipt</span>(image);</div>
+            <div>&nbsp;</div>
+            <div><span class="code-comment">// Step 1: Deterministic Parse</span></div>
+            <div><span class="code-keyword">const</span> items = <span class="code-property">parser</span>.<span class="code-function">extractLineItems</span>(receipt);</div>
+            <div>&nbsp;</div>
+            <div><span class="code-comment">// Step 2: Neural Audit</span></div>
+            <div><span class="code-keyword">const</span> metadata = <span class="code-property">auditor</span>.<span class="code-function">analyze</span>(receipt);</div>
+            <div>&nbsp;</div>
+            <div><span class="code-comment">// Step 3: Confidence Scoring</span></div>
+            <div><span class="code-keyword">const</span> confidence = <span class="code-function">calculateScore</span>(items, metadata);</div>
+            <div><span class="code-property">console</span>.<span class="code-function">log</span>(<span class="code-string">`Confidence: ${confidence}%`</span>);</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-            const modal = document.getElementById('qrModal');
-            modal.style.display = 'flex';
-            setTimeout(() => {
-                modal.classList.add('active');
-            }, 10);
+  <!-- Privacy Banner -->
+  <section class="privacy-banner" id="privacy">
+    <div class="container">
+      <div class="privacy-badge">
+        <i data-lucide="shield-check" style="width: 24px; height: 24px; color: var(--primary); stroke: currentColor; stroke-width: 1.5; fill: none;"></i>
+        <span>Your Data Never Leaves Your Device</span>
+      </div>
+      <h2>Privacy Isn't a Feature.<br>It's the <span>Foundation.</span></h2>
+      <p>VaultKeep uses on-device ML Kit for text recognition and local LLM (llama.rn) for semantic understanding. Your financial data stays on your device, always.</p>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section" id="download">
+    <div class="container">
+      <h2>Ready to Take Control?</h2>
+      <p>Join our closed testing program to experience VaultKeep before its public release.</p>
+      <div class="cta-buttons">
+        <a href="https://kuya-kulotz.github.io/vault-keep-docs/test.html" class="btn btn-primary">Join Closed Testing</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Donation -->
+  <section class="donation-section" id="donate">
+    <div class="container">
+      <div class="donation-card">
+        <div class="donation-icon"><i data-lucide="heart"></i></div>
+        <h2>Support VaultKeep</h2>
+        <p>VaultKeep is developed independently. If you find it useful, consider buying the developer a coffee to keep the momentum going.</p>
+        <a href="https://kuya-kulotz.github.io/vault-keep-docs/donate.html" class="btn btn-primary"><i data-lucide="coffee" style="width: 18px; height: 18px; stroke: currentColor; stroke-width: 1.5; fill: none;"></i> Buy Me a Coffee</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container footer-inner">
+      <div class="footer-copy text-center">
+        &copy; 2026 VaultKeep. Built with privacy in mind.
+      </div>
+    </div>
+  </footer>
+  <script>
+    lucide.createIcons();
+
+    // Intersection Observer for scroll animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
         }
+      });
+    }, { threshold: 0.1 });
 
-        function closeModal(event) {
-            const modal = document.getElementById('qrModal');
-            modal.classList.remove('active');
-            setTimeout(() => {
-                modal.style.display = 'none';
-            }, 300);
-        }
-    </script>
+    document.querySelectorAll('.fade-in, .feature-card').forEach(el => observer.observe(el));
+  </script>
 </body>
 </html>
